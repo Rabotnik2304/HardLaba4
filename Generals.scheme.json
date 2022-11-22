@@ -1,5 +1,5 @@
 {
-  "name": "FootballMatch",
+  "name": "Generals",
   "columns": [
     {
       "name": "id",
@@ -7,22 +7,27 @@
       "isPrimary": true
     },
     {
-      "name": "team1",
+      "name": "name",
       "type": "string",
       "isPrimary": false
     },
     {
-      "name": "team2",
-      "type": "string",
-      "isPrimary": false
-    },
-    {
-      "name": "matchDate",
+      "name": "birthdate",
       "type": "datetime",
       "isPrimary": false
     },
     {
-      "name": "score",
+      "name": "deathdate",
+      "type": "datetime",
+      "isPrimary": false
+    },
+    {
+      "name": "nation",
+      "type": "string",
+      "isPrimary": false
+    },
+    {
+      "name": "rank",
       "type": "string",
       "isPrimary": false
     }
