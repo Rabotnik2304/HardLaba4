@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System.Reflection.PortableExecutable;
+using System.Data.Common;
+using static HardLaba4.Program;
 
 namespace HardLaba4
 {
@@ -22,27 +23,49 @@ namespace HardLaba4
             [JsonProperty("type")]
             public string Type { get; set; }
         }
-
-        static void Main(string[] args)
+        public class Table
         {
-            Scheme f = readJson("FootballMatch.scheme.json");
+            public List<Row> Rows { get; set; }
+            public Table()
+            {
+                Rows = new List<Row>();
+            }
+        }
+
+        public class Row
+        {
+            public Dictionary<SchemeColumn, object> Data { get; set; }
+            public Row()
+            {
+                Data = new Dictionary<SchemeColumn, object>();
+            }
+        }
+
+
+    static void Main(string[] args)
+        {
+            string pathScheme = "FootballMatch.scheme.json";
+            Scheme schemeOfTable = readJson(pathScheme);
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             try
             {
-                string[] allLinesTable = File.ReadAllLines("FootballMatch.csv");
-                for ( int i=0; i<allLinesTable.Length;i++)
+                string pathTable = "FootballMatch.csv";
+                Table table = TableInitialization(schemeOfTable, pathTable);
+                
+                foreach (SchemeColumn key in table.Rows[0].Data.Keys)
                 {
-                    if (allLinesTable[i].Length > 6)
+                    Console.Write(key.Name + " ");
+                }
+                Console.WriteLine();
+                foreach (Row row in table.Rows)
+                {
+                    foreach (object value in row.Data.Values)
                     {
-                        throw new ArgumentException($"В файле Book.csv в строке {i + 1} столбцов больше чем 6");
+                        Console.Write(value + " ");
                     }
-
-                    if (f.Columns[i].Type == "int")
-                    {
-
-                    }
+                    Console.WriteLine();
                 }
             }
             catch (ArgumentException ex)
@@ -52,10 +75,71 @@ namespace HardLaba4
                 Console.WriteLine(ex.Message);
             }
         }
+
+        private static Table TableInitialization(Scheme schemeOfTable, string pathTable)
+        {
+            string[] allLinesTable = File.ReadAllLines(pathTable);
+
+            Table table = new Table();
+            
+            for (int i = 0; i < allLinesTable.Length; i++)
+            {
+                string[] elementsOfLine = allLinesTable[i].Split(";");
+
+                if (elementsOfLine.Length > schemeOfTable.Columns.Count)
+                {
+                    throw new ArgumentException($"В файле {pathTable} в строке {i + 1} столбцов больше чем {schemeOfTable.Columns.Count}");
+                }
+
+                Row row = new Row();
+
+                for (int j = 0; j < elementsOfLine.Length; j++)
+                {
+                    switch (schemeOfTable.Columns[j].Type)
+                    {
+                        case "uint":
+                            if (uint.TryParse(elementsOfLine[j], out uint number))
+                            {
+                                row.Data.Add(schemeOfTable.Columns[j], number);
+                            }
+                            else
+                            {
+                                throw new ArgumentException($"В файле {pathTable} в строке {i + 1} в столбце {j + 1} записаны некорректные данные");
+                            }
+                            break;
+                        case "double":
+                            if (double.TryParse(elementsOfLine[j], out double doubleNumber))
+                            {
+                                row.Data.Add(schemeOfTable.Columns[j], doubleNumber);
+                            }
+                            else
+                            {
+                                throw new ArgumentException($"В файле {pathTable} в строке {i + 1} в столбце {j + 1} записаны некорректные данные");
+                            }
+                            break;
+                        case "datetime":
+                            if (DateTime.TryParse(elementsOfLine[j], out DateTime date))
+                            {
+                                row.Data.Add(schemeOfTable.Columns[j], date);
+                            }
+                            else
+                            {
+                                throw new ArgumentException($"В файле {pathTable} в строке {i + 1} в столбце {j + 1} записаны некорректные данные");
+                            }
+                            break;
+                        default:
+                            row.Data.Add(schemeOfTable.Columns[j], elementsOfLine[j]);
+                            break;
+                    }
+                }
+                table.Rows.Add(row);
+            }
+            return table;
+        }
+
         private static Scheme readJson(string path)
         {
             return JsonConvert.DeserializeObject<Scheme>(File.ReadAllText(path));
         }
-
     }
 }

@@ -1,0 +1,33 @@
+{
+  "name": "FootballMatch",
+  "columns": [
+    {
+      "name": "id",
+      "type": "uint",
+      "isPrimary": true
+    },
+    {
+      "name": "team1",
+      "type": "string",
+      "referencedTable": "Reader",
+      "isPrimary": false
+    },
+    {
+      "name": "team2",
+      "type": "string",
+      "referencedTable": "Book",
+      "isPrimary": false
+    },
+    {
+      "name": "matchDate",
+      "type": "datetime",
+      "isPrimary": false
+    },
+    {
+      "name": "score",
+      "type": "string",
+      "isPrimary": false
+    }
+  ]
+}
+
