@@ -34,20 +34,24 @@ namespace HardLaba4
             Data = new Dictionary<SchemeColumn, object>();
         }
     }
+
     internal class Program
     {
         static void Main(string[] args)
         {
-            string pathScheme = "Scheme\\FootballMatch.scheme.json";
-            Scheme schemeOfTable = readJson(pathScheme);
-
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            string pathScheme = "Scheme\\FootballMatch.scheme.json";
+            // с помошью Newtonsoft.Json и классов Scheme и SchemeColumn
+            // парсим информацию из json файла со схемой таблички
+            Scheme schemeOfTable = readJson(pathScheme);
 
             try
             {
-                string pathTable = "Data\\FootballMatch.csv";
+                string pathTable = "FootballMatch.csv";
                 Table table = TableInitialization(schemeOfTable, pathTable);
-                
+
+                // вывод информации, считанной из csv файла
                 foreach (SchemeColumn key in table.Rows[0].Data.Keys)
                 {
                     Console.Write(key.Name+" ");
@@ -55,11 +59,7 @@ namespace HardLaba4
                 Console.WriteLine();
                 foreach (Row row in table.Rows)
                 {
-                    foreach (object value in row.Data.Values)
-                    {
-                        Console.Write(value + " ");
-                    }
-                    Console.WriteLine();
+                    Console.WriteLine(string.Join(" ",row.Data.Values));
                 }
             }
             catch (ArgumentException ex)
@@ -69,11 +69,10 @@ namespace HardLaba4
                 Console.WriteLine(ex.Message);
             }
         }
-        
 
         private static Table TableInitialization(Scheme schemeOfTable, string pathTable)
         {
-            string[] allLinesTable = File.ReadAllLines(pathTable);
+            string[] allLinesTable = File.ReadAllLines("Data\\"+pathTable);
 
             Table table = new Table();
             
