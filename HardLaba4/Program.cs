@@ -2,53 +2,20 @@
 
 namespace HardLaba4
 {
-    public class Scheme
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("columns")]
-        public List<SchemeColumn> Columns { get; set; }
-    }    
-    public class SchemeColumn
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-    }
-    public class Table
-    {
-        public List<Row> Rows { get; set; }
-        public Table()
-        {
-            Rows = new List<Row>();
-        }
-    }
-    public class Row
-    {
-        public Dictionary<SchemeColumn, object> Data { get; set; }
-        public Row()
-        {
-            Data = new Dictionary<SchemeColumn, object>();
-        }
-    }
-
     internal class Program
     {
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            string pathScheme = "Scheme\\FootballMatch.scheme.json";
+            string pathScheme = "Scheme\\Generals.scheme.json";
             // с помошью Newtonsoft.Json и классов Scheme и SchemeColumn
             // парсим информацию из json файла со схемой таблички
             Scheme schemeOfTable = readJson(pathScheme);
 
             try
             {
-                string pathTable = "FootballMatch.csv";
+                string pathTable = "Generals.csv";
                 Table table = TableInitialization(schemeOfTable, pathTable);
 
                 // вывод информации, считанной из csv файла
