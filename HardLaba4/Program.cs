@@ -11,7 +11,7 @@ namespace HardLaba4
             string pathScheme = "Scheme\\Generals.scheme.json";
             // с помошью Newtonsoft.Json и классов Scheme и SchemeColumn
             // парсим информацию из json файла со схемой таблички
-            Scheme schemeOfTable = readJson(pathScheme);
+            Scheme schemeOfTable = Scheme.readJson(pathScheme);
 
             try
             {
@@ -35,10 +35,6 @@ namespace HardLaba4
                 Console.Write("Ошибка:");
                 Console.WriteLine(ex.Message);
             }
-        }
-        private static Scheme readJson(string path)
-        {
-            return JsonConvert.DeserializeObject<Scheme>(File.ReadAllText(path));
-        }
+        } 
     }
 }
