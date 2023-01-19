@@ -11,7 +11,7 @@ namespace HardLaba4
             string pathScheme = "Scheme\\Generals.scheme.json";
             // с помошью Newtonsoft.Json и классов Scheme и SchemeColumn
             // парсим информацию из json файла со схемой таблички
-            Scheme schemeOfTable = Scheme.readJson(pathScheme);
+            Scheme schemeOfTable = Scheme.ReadJson(pathScheme);
 
             try
             {
